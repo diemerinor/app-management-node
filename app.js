@@ -1,14 +1,28 @@
 const express = require('express');
 const app = express();
-const sequelize = require('./config/db.config');
-const authRoutes = require('./routes/auth.routes');
 require('dotenv').config();
+
+// Importar las rutas
+const authRoutes = require('./routes/auth.routes');
+const userRoutes = require('./routes/user.routes');
+const roleRoutes = require('./routes/role.routes');
+const attendanceRoutes = require('./routes/attendance.routes');
+const payrollRoutes = require('./routes/payroll.routes');
+const benefitRoutes = require('./routes/benefit.routes');
+const benefitTypeRoutes = require('./routes/benefitType.routes');
 
 app.use(express.json());
 
+// Configurar las rutas
 app.use('/api/auth', authRoutes);
+app.use('/api/users', userRoutes);
+app.use('/api/roles', roleRoutes);
+app.use('/api/attendance', attendanceRoutes);
+app.use('/api/payroll', payrollRoutes);
+app.use('/api/benefits', benefitRoutes);
+app.use('/api/benefit-types', benefitTypeRoutes);
 
-// Manejador de errores global
+// Manejador global de errores
 app.use((err, req, res, next) => {
     console.error(err.stack);
     res.status(500).json({ message: 'Algo salió mal. Inténtalo de nuevo más tarde.' });
@@ -20,9 +34,3 @@ app.listen(PORT, () => {
 });
 
 module.exports = app;
-
-// Manejar uncaught exceptions
-process.on('uncaughtException', (err) => {
-    console.error('Uncaught Exception:', err);
-    process.exit(1);
-});
