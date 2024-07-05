@@ -1,8 +1,15 @@
 const express = require('express');
+const cors = require('cors');  // Importar cors
 const app = express();
 require('dotenv').config();
 
-// Importar las rutas
+// Configurar CORS
+app.use(cors({
+  origin: 'http://localhost:4200',  // Reemplaza con la URL de tu frontend
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  credentials: true  // Permitir cookies y cabeceras
+}));
+
 const authRoutes = require('./routes/auth.routes');
 const userRoutes = require('./routes/user.routes');
 const roleRoutes = require('./routes/role.routes');
@@ -13,7 +20,6 @@ const benefitTypeRoutes = require('./routes/benefitType.routes');
 
 app.use(express.json());
 
-// Configurar las rutas
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/roles', roleRoutes);
@@ -24,13 +30,13 @@ app.use('/api/benefit-types', benefitTypeRoutes);
 
 // Manejador global de errores
 app.use((err, req, res, next) => {
-    console.error(err.stack);
-    res.status(500).json({ message: 'Algo salió mal. Inténtalo de nuevo más tarde.' });
+  console.error(err.stack);
+  res.status(500).json({ message: 'Algo salió mal. Inténtalo de nuevo más tarde.' });
 });
 
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
+  console.log(`Server is running on port ${PORT}`);
 });
 
 module.exports = app;
