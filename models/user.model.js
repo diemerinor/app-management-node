@@ -1,6 +1,7 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/database');
 const UserRole = require('./userRole.model');
+const Attendance = require('./attendance.model');
 
 const User = sequelize.define('User', {
     first_name: {
@@ -42,7 +43,8 @@ const User = sequelize.define('User', {
 });
 
 User.associate = function(models) {
-    User.hasMany(models.UserRole, { foreignKey: 'user_id' });
+    User.hasMany(UserRole, { foreignKey: 'user_id' });  // Usa el modelo importado UserRole
+    User.hasMany(Attendance, { foreignKey: 'user_id' });  // Usa el modelo importado Attendance
 };
 
 module.exports = User;

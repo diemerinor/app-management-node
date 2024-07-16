@@ -41,10 +41,13 @@ const sequelize = require('./config/database');
 const User = require('./models/user.model');
 const UserRole = require('./models/userRole.model');
 const Role = require('./models/role.model');
+const Attendance = require('./models/attendance.model');
 
 User.associate({ UserRole });
 Role.associate({ UserRole });
 UserRole.associate({ User, Role });
+Attendance.associate = ({ User });
+
 
 (async () => {
     try {
