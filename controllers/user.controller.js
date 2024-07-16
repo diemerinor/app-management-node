@@ -1,4 +1,5 @@
 const userService = require('../services/user.service');
+const userRepository = require('../repositories/userRepository');
 
 const createUser = async (req, res) => {
     try {
@@ -11,6 +12,7 @@ const createUser = async (req, res) => {
 
 const getUserById = async (req, res) => {
     try {
+        console.log("entré aqui 1")
         const user = await userService.getUserById(req.params.id);
         if (user) {
             res.status(200).json(user);
@@ -49,10 +51,21 @@ const deleteUser = async (req, res) => {
     }
 };
 
+const getAllUsersWithRoles = async (req, res) => {
+    try {
+        console.log("entré acá 2")
+        const users = await userRepository.findAllWithRoles();
+        res.status(200).json(users);
+    } catch (error) {
+        res.status(500).json({ error: 'Error fetching users with roles' });
+    }
+};
+
 module.exports = {
     createUser,
     getUserById,
     getAllUsers,
     updateUser,
-    deleteUser
+    deleteUser,
+    getAllUsersWithRoles
 };

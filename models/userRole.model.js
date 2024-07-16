@@ -1,5 +1,5 @@
 const { DataTypes } = require('sequelize');
-const sequelize = require('../config/db.config');
+const sequelize = require('../config/database');
 const User = require('./user.model');
 const Role = require('./role.model');
 
@@ -8,19 +8,24 @@ const UserRole = sequelize.define('UserRole', {
         type: DataTypes.INTEGER,
         references: {
             model: User,
-            key: 'id',
+            key: 'user_id',
         },
     },
     role_id: {
         type: DataTypes.INTEGER,
         references: {
             model: Role,
-            key: 'id',
+            key: 'role_id',
         },
     },
+}, {
+    tableName: 'user_roles',
+    timestamps: false,
 });
 
-User.belongsToMany(Role, { through: UserRole });
-Role.belongsToMany(User, { through: UserRole });
+UserRole.associate = function(models) {
+    UserRole.belongsTo(models.User, { foreignKey: 'user_id' });
+    UserRole.belongsTo(models.Role, { foreignKey: 'role_id' });
+};
 
 module.exports = UserRole;

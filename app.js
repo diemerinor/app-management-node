@@ -1,13 +1,12 @@
 const express = require('express');
-const cors = require('cors');  // Importar cors
+const cors = require('cors');  
 const app = express();
 require('dotenv').config();
 
-// Configurar CORS
 app.use(cors({
-  origin: 'http://localhost:4200',  // Reemplaza con la URL de tu frontend
+  origin: 'http://localhost:4200',
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-  credentials: true  // Permitir cookies y cabeceras
+  credentials: true,
 }));
 
 const authRoutes = require('./routes/auth.routes');
@@ -28,7 +27,6 @@ app.use('/api/payroll', payrollRoutes);
 app.use('/api/benefits', benefitRoutes);
 app.use('/api/benefit-types', benefitTypeRoutes);
 
-// Manejador global de errores
 app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).json({ message: 'Algo salió mal. Inténtalo de nuevo más tarde.' });
@@ -38,5 +36,23 @@ const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
+
+const sequelize = require('./config/database');
+const User = require('./models/user.model');
+const UserRole = require('./models/userRole.model');
+const Role = require('./models/role.model');
+
+User.associate({ UserRole });
+Role.associate({ UserRole });
+UserRole.associate({ User, Role });
+
+(async () => {
+    try {
+        await sequelize.sync();
+        console.log('Database synced!');
+    } catch (error) {
+        console.error('Unable to sync database:', error);
+    }
+})();
 
 module.exports = app;
