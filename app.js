@@ -16,6 +16,7 @@ const attendanceRoutes = require('./routes/attendance.routes');
 const payrollRoutes = require('./routes/payroll.routes');
 const benefitRoutes = require('./routes/benefit.routes');
 const benefitTypeRoutes = require('./routes/benefitType.routes');
+const eventRoutes = require('./routes/event.routes');
 
 app.use(express.json());
 
@@ -26,6 +27,7 @@ app.use('/api/attendance', attendanceRoutes);
 app.use('/api/payroll', payrollRoutes);
 app.use('/api/benefits', benefitRoutes);
 app.use('/api/benefit-types', benefitTypeRoutes);
+app.use('/api/events', eventRoutes);
 
 app.use((err, req, res, next) => {
   console.error(err.stack);
@@ -42,6 +44,7 @@ const User = require('./models/user.model');
 const UserRole = require('./models/userRole.model');
 const Role = require('./models/role.model');
 const Attendance = require('./models/attendance.model');
+//const Event = require('./models/event.model');
 
 User.associate({ UserRole });
 Role.associate({ UserRole });
