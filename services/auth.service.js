@@ -19,19 +19,22 @@ const register = async (userData) => {
 };
 
 const login = async (email, password) => {
-    const user = await User.findByEmail(email);
+    const user = await User.findOne({ email });
+    console.log("email"+email)
+    console.log("password:"+password)
     if (!user) {
-        throw new Error('User not found');
+        console.log("no existe tal usuario")
+        return { success: false, message: 'User not found' };
     }
-
 
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
-        throw new Error('Invalid password');
+        console.log("contraseña incorrecta")
+        return { success: false, message: 'Invalid password' };
     }
 
     const token = jwt.sign({ id: user.id, email: user.email }, process.env.SECRET_KEY, { expiresIn: '1h' });
-    return { user, token };
+    return { success: true, user, token };
 };
 
 module.exports = { register, login };
