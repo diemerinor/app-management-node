@@ -12,8 +12,14 @@ const User = sequelize.define('User', {
         type: DataTypes.STRING,
         allowNull: false,
     },
+    code: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        unique: true,
+    },
     email: {
         type: DataTypes.STRING,
+        require: true,
         allowNull: false,
         unique: true,
     },
@@ -36,6 +42,10 @@ const User = sequelize.define('User', {
     image_url: {
         type: DataTypes.STRING,
         allowNull: true,
+    },
+    dark_mode: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
     },
 }, {
     tableName: 'users',

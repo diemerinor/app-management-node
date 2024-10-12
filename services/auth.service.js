@@ -18,10 +18,9 @@ const register = async (userData) => {
     return newUser;
 };
 
-const login = async (email, password) => {
-    const user = await User.findOne({ email });
-    console.log("email"+email)
-    console.log("password:"+password)
+const login = async (code, password) => {
+    const user = await User.findOne({ where: { code: code } });
+    console.log(user)
     if (!user) {
         console.log("no existe tal usuario")
         return { success: false, message: 'User not found' };
@@ -32,9 +31,11 @@ const login = async (email, password) => {
         console.log("contraseña incorrecta")
         return { success: false, message: 'Invalid password' };
     }
-
-    const token = jwt.sign({ id: user.id, email: user.email }, process.env.SECRET_KEY, { expiresIn: '1h' });
-    return { success: true, user, token };
+    console.log("datos user:"+user.email)
+    console.log("dark mode 1"+user.dark_mode)
+    const dark_mode = user.dark_mode;
+    const token = jwt.sign({ id: user.id, email: user.email}, process.env.SECRET_KEY, { expiresIn: '1h' });
+    return { success: true, user, token, dark_mode };
 };
 
 module.exports = { register, login };

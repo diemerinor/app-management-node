@@ -12,9 +12,12 @@ const register = async (req, res) => {
 
 const login = async (req, res) => {
     try {
-        const { email, password } = req.body;
-        const { success, user, token } = await authService.login(email, password);
-        res.status(200).json({ success:success, user, token });
+        console.log("data login:")
+        console.log(req.body)
+        const { code, password } = req.body;
+        const { success, user, token, dark_mode } = await authService.login(code, password);
+        console.log("dark Mode:"+dark_mode)
+        res.status(200).json({ success:success, user, token, dark_mode });
     } catch (error) {
         console.error(error);
         res.status(500).json({ success:false, message: error.message });
